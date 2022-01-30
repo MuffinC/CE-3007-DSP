@@ -9,16 +9,11 @@ import winsound
 def fnNormalizeFloatTo16Bit(yFloat):
     y_16bit = [int(s*32767) for s in yFloat]
     return(np.array(y_16bit, dtype='int16'))
-def fnNormalize16BitToFloat(y_16bit):
-    yFloat = [float(s/32767.0) for s in y_16bit]
-    return(np.array(yFloat, dtype='float'))
 
 def music(y,Fs,filename):
     #music play portion
     y_16bit = fnNormalizeFloatTo16Bit(y)
-    y_float = fnNormalize16BitToFloat(y_16bit)
-    wavfile.write(filename, Fs, y_16bit)
-    wavfile.write(filename, Fs, y_float)  # wavfile write can save it as a 32 bit format float
+    wavfile.write(filename, Fs, y_16bit)  # wavfile write can save it as a 32 bit format float
     winsound.PlaySound(filename, winsound.SND_FILENAME)
     os.remove(filename)
 
@@ -27,16 +22,16 @@ def lab3_1():
     #y(t) = 0.1cos(2 *np.pi*F*T)
 
     Fs = 16000
-    numSamples = 76
+    numSamples = 75
     F = 1000
     startt=0
     endt=startt+1/Fs*numSamples
     fai =0
-    n = np.arange(startt, endt, 1.0/ Fs)  # because 1 second
-    y = 0.1 *np.cos(2* np.pi *F *n + fai)
+    na1 = np.arange(startt, endt, 1.0/ Fs)  # because 1 second
+    ya1 = 0.1 *np.cos(2* np.pi *F *na1 + fai)
+
     plt.figure(1)
-    plt.plot(n[0:numSamples], y[0:numSamples], 'r--o');
-    plt.stem(n, y, 'g-');
+    plt.stem(na1, ya1, 'g-');
     #    plt.plot(t, y,'ro');
     plt.xlabel('time in seconds');
     plt.ylabel('y(t)')
@@ -44,12 +39,97 @@ def lab3_1():
     plt.grid()
     plt.show()
     filename = "l1_31a.wav"
-    music(y, Fs, filename)
+    music(ya1, Fs, filename)
+
+    """
+    #playing the multiple ranges
+    endt=0.5
+    for Fx in range(0,32001,2000):
+        print("Now playing at F=",Fx)
+        n = np.arange(startt, endt, 1.0 / Fs)
+        y= 0.1 *np.cos(2* np.pi *Fx *n + fai)
+        music(y, Fs, filename)
+
+    #Explaination on what happened:
+    obs: Up until 8khz it had an increasing frequency which is noted in the tone. Which then decreased until 16khz
+    which then increase back up until 24khz and finally decreasing to 32khz
+    Simply put, this is aliasing, which will occur when Fs<2F, since Fs=16khz.
+    at F=8khz, Fs is 16khz which is when aliasing will start to occur because the sampLing rate is <2F
+    this cause the illusion that the cosine wave is going slower or rather it is assumed that it is going 
+    at a different frequency. The algorithm will just pick up the wave with the lowest frequencY as such from 
+    8-16khz the pitch decreeases
+    same thing occurs at 16khz and at 24khz as the pitch is mirrored
+    """
+    Fs = 16000
+    F = 1000
+    startt = 0
+    cyclec = 6
+    Points = int(Fs/F *cyclec)
+    endt = startt + 1 / Fs * Points
+    fai = 0
+    na2 = np.arange(startt, endt, 1.0 / Fs)  # because 1 second
+    ya2 = 0.1 * np.cos(2 * np.pi * F * na2 + fai)
+
+    plt.figure(2)
+    plt.subplot(311)
+    plt.plot(na2, ya2)#y(T)
+
+    plt.subplot(312)
+    plt.plot(na2, ya2,'g-')
+    plt.stem(na2, ya2,use_line_collection=True)#y[nT]
+
+
+    na2_i= np.arange(0,len(na2),1)#put all x values into an array
+    plt.subplot(313)
+    plt.stem(na2_i, ya2)  # y(T)
+    plt.show()
+
+
+    """
+    i) y(t) vs y[nt]:
+    y(t) is a continuous time signal while  y[nt] is discrete time which is multiple sampled points of the signal
+    Both functions take respect to time meaning that they will have the same x axis
+    
+    ii) y[n] vs y[nt] 
+    y[n] is different as it is discrete time as such it wont share the same axis at y[nt] and the x axis is 
+    in terms of samples instead of t,time.
+    
+    iii) To check if a signal is periodic, for y[n] there need to exist a period of N such that 
+    y[n] = y[n+N]. This essentially means that after after N amount of samples the signal will repeat itself
+    For this case lets let N = K, where K is an arbituary value.
+    We now sub in the y[n] equation so:
+    0.1 cos(2*pi*F/Fs*n) = 0.1 cos(2* pi* F/Fs* (n+K)) since we now that the cosine wave is periodice 
+    every 2*pi, this would imply that 
+    2*pi*F/Fs*n && 2* pi* F/Fs* (n+K) are both multiples of 2*pi
+    thus we can see that as long as the result of F/Fs *n is an integer the signal will be periodic 
+    Conversely, if it is not an integer it is aperiodic    
+    since our question uses F=1000 and Fs =16000, as such 1/16 = 1/minK which results in minK being 16
+    on the assumption that n =0. Therefore, every 16 samples the signal is periodic. 
+    """
+    F = 17000
+    Points4 = 32
+    endt4 = startt + 1 / Fs * Points4
+    fai = 0
+    na2_4 = np.arange(startt, endt4, 1.0 / Fs)  # because 1 second
+    ya2_4 = 0.1 * np.cos(2 * np.pi * F * na2 + fai)
+
+    plt.figure(2)
+    plt.subplot(311)
+    plt.plot(na2_4, ya2_4)  # y(T)
+
+    plt.subplot(312)
+    plt.plot(na2_4, ya2_4, 'g-')
+    plt.stem(na2_4, ya2_4, use_line_collection=True)  # y[nT]
+
+    na2_i = np.arange(0, len(na2_4), 1)  # put all x values into an array
+    plt.subplot(313)
+    plt.stem(na2_i, ya2_4)  # y(T)
+    plt.show()
 
 
 
 
-    #part b
+
 
 
 
