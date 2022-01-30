@@ -16,13 +16,32 @@ def music(y,Fs,filename):
     wavfile.write(filename, Fs, y_16bit)  # wavfile write can save it as a 32 bit format float
     winsound.PlaySound(filename, winsound.SND_FILENAME)
     os.remove(filename)
+def aliasier(F,F_14,cycles=6):
+    num_pts_percycle = 32
+    x_1biv = np.arange(0,cycles/F,1/F/num_pts_percycle)
+    y_1biv = np.cos(2*np.pi*F*x_1biv)
+    y_alias = np.zeros_like(y_1biv) # create an empty array that is similar to y
+    my_color = ["k" for _ in y_alias]
+    for i in range(len(x_1biv)):
+        if i%int(num_pts_percycle*F/F_14) == 0: #no remainder then store into the aliasing array
+            y_alias[i] = np.cos(2*np.pi*F*x_1biv[i])
+            my_color[i] = "r"
+    plt.figure(figsize=(20,3))
+    plt.vlines(x_1biv,0,y_alias,color=my_color)
+    plt.scatter(x_1biv,y_alias,color=my_color)
+    plt.plot(x_1biv,y_1biv)
+    recon_x = [x_1biv[i] for i in range(len(my_color)) if my_color[i] == "r"]
+    recon_y = [y_1biv[i] for i in range(len(my_color)) if my_color[i] == "r"]
+    plt.plot(recon_x,recon_y)
+    plt.show()
+
 
 def lab3_1():
     #part a
     #y(t) = 0.1cos(2 *np.pi*F*T)
 
     Fs = 16000
-    numSamples = 75
+    numSamples = 72
     F = 1000
     startt=0
     endt=startt+1/Fs*numSamples
@@ -106,25 +125,7 @@ def lab3_1():
     since our question uses F=1000 and Fs =16000, as such 1/16 = 1/minK which results in minK being 16
     on the assumption that n =0. Therefore, every 16 samples the signal is periodic. 
     """
-    F = 17000
-    Points4 = 32
-    endt4 = startt + 1 / Fs * Points4
-    fai = 0
-    na2_4 = np.arange(startt, endt4, 1.0 / Fs)  # because 1 second
-    ya2_4 = 0.1 * np.cos(2 * np.pi * F * na2 + fai)
-
-    plt.figure(2)
-    plt.subplot(311)
-    plt.plot(na2_4, ya2_4)  # y(T)
-
-    plt.subplot(312)
-    plt.plot(na2_4, ya2_4, 'g-')
-    plt.stem(na2_4, ya2_4, use_line_collection=True)  # y[nT]
-
-    na2_i = np.arange(0, len(na2_4), 1)  # put all x values into an array
-    plt.subplot(313)
-    plt.stem(na2_i, ya2_4)  # y(T)
-    plt.show()
+    aliasier(17000,16000)
 
 
 
