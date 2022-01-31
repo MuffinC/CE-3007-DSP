@@ -1,5 +1,4 @@
 import os
-
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io.wavfile as wavfile
@@ -10,12 +9,13 @@ def fnNormalizeFloatTo16Bit(yFloat):
     y_16bit = [int(s*32767) for s in yFloat]
     return(np.array(y_16bit, dtype='int16'))
 
-def music(y,Fs,filename):
+def music(y,Fs,filename,x=0):
     #music play portion
     y_16bit = fnNormalizeFloatTo16Bit(y)
     wavfile.write(filename, Fs, y_16bit)  # wavfile write can save it as a 32 bit format float
     winsound.PlaySound(filename, winsound.SND_FILENAME)
     os.remove(filename)
+
 def aliasier(F,F_14,cycles=6):
     num_pts_percycle = 32
     x_1biv = np.arange(0,cycles/F,1/F/num_pts_percycle)
@@ -125,14 +125,72 @@ def lab3_1():
     since our question uses F=1000 and Fs =16000, as such 1/16 = 1/minK which results in minK being 16
     on the assumption that n =0. Therefore, every 16 samples the signal is periodic. 
     """
-    aliasier(17000,16000)
-
-
-
-
-
-
-
-
     #part c
-lab3_1()
+    aliasier(17000, 16000)
+
+#this is for part 3.2
+class DTMF:
+    #based on online search, unit is in hz
+    freqarray = [697,770,852,941,1209,1336,1477,1633]
+    tonedict = {
+        '1': (freqarray[0],freqarray[4]),
+        '2': (freqarray[0],freqarray[5]),
+        '3': (freqarray[0],freqarray[6]),
+        '4': (freqarray[1],freqarray[4]),
+        '5': (freqarray[1],freqarray[5]),
+        '6': (freqarray[1],freqarray[6]),
+        '7': (freqarray[2],freqarray[4]),
+        '8': (freqarray[2],freqarray[5]),
+        '9': (freqarray[2],freqarray[6]),
+        '*': (freqarray[3],freqarray[4]),
+        '0': (freqarray[3],freqarray[5]),
+        '#': (freqarray[3], freqarray[6]),
+        'A': (freqarray[0],freqarray[7]),
+        'B': (freqarray[1],freqarray[7]),
+        'C': (freqarray[2], freqarray[7]),
+        'D': (freqarray[3], freqarray[7]),
+        'FO': (freqarray[0], freqarray[7]),
+        'F': (freqarray[1], freqarray[7]),
+        'I': (freqarray[2], freqarray[7]),
+        'P': (freqarray[3], freqarray[7])
+    }
+    def GenSampledDTMF(seq,Fs,durTone):
+        Amp= 0.5
+        startt=0
+        faiz =0
+
+        #check if the sequence is part of the dict
+        if seq in DTMF.tonedict:
+            (key1,key2) = DTMF.tonedict.get(seq)
+            #now to generate the t for the signal
+            t = np.arange(startt, durTone,1/Fs)
+            #DTMF is a summation of 2 signals
+            y = (Amp *np.cos((2 *np.pi *key1 *t +faiz))) + np.cos(2 *np.pi *key2 *t +faiz)
+            return t, y
+        else:
+            print("invalid key/sequence inputted")
+    def GenSampledDTMFSEQ(seq,Fs,durTone):
+        Amp= 0.5
+        startt=0
+        faiz =0
+        #we need to break the string up
+        seqarray = list(seq)
+        for count in range(0,len(seqarray)):
+            x3_2, y3_2=DTMF.GenSampledDTMF(seqarray[count],Fs,durTone)
+            music(y3_2, 16000, '3_2.wav', x=x3_2)
+
+def lab3_2():
+    myDSPfn = DTMF()#create new DTMF object
+    #testing 1 button instead of multiple
+    """
+    (x3_2,y3_2) = DTMF.GenSampledDTMF('1',16000,1.0)
+    music(y3_2,16000,'3_2.wav',x=x3_2)
+    """
+    #now to run multiple in sequence
+    DTMF.GenSampledDTMFSEQ('0123#',16000,1.0)
+
+def lab3_3():
+
+#lab3_1()
+#lab3_2()
+lab3_3()
