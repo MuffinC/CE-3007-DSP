@@ -190,6 +190,16 @@ def lab3_2():
     DTMF.GenSampledDTMFSEQ('0123#',16000,1.0)
 
 def lab3_3():
+    #since there was no mention of A or B
+    #following the video
+    Fs =60
+    A=2
+    B=0.5
+    y1 =A* np.cos(2 * np.pi * 10 * t)
+    y2 = B* np.cos(2 * np.pi * 15 * t)
+    y3 = y1 + y2
+
+
 
 #lab3_1()
 #lab3_2()
