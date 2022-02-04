@@ -334,6 +334,91 @@ def lab3_4():
     ax.legend()
     plt.show()
 
+def lab3_5():
+    # Wn = (2 pi /N )*k
+    for L in range(0,4,1):
+        print('Below is figure 2 shows complex exponential')
+        numSamples = 16
+        k =L
+        A = 1
+        N=16
+        n = np.arange(0, numSamples, 1)
+        z = 2 * np.pi / N *k *n
+        y1 = np.multiply(np.power(A, n), np.exp(1j * z))
+
+        for zeta in np.arange(0, min(10, numSamples)):
+            print('%d, %.4f + j%.4f' % (n[zeta], y1[zeta].real, y1[zeta].imag))
+
+        # plotting in 2-D, the real and imag in the same figure
+        plt.figure(1)
+        plt.plot(n, y1[0:numSamples].real, 'r--o')
+        plt.plot(n, y1[0:numSamples].imag, 'g--o')
+        plt.xlabel('sample index n');
+        plt.ylabel('y[n]')
+        plt.title('Complex exponential (red=real) (green=imag)')
+        plt.grid()
+        plt.show()
+        # a way to show the above is through a table, refer to ss
+
+        # 3.42 phasor portion
+        # plotting in polar, understand what the spokes are
+
+        plt.figure(3)
+        for x in y1:
+            plt.polar([0, np.angle(x)], [0, np.abs(x)], marker='o')
+
+        plt.title('Polar plot showing phasors at n=0..N')
+        plt.show()
+        # time is not shown in the 2d plot hence u create a 3d plot
+        # how many points to make 1 round? ans is 36,72=2 complete rounds
+        # if they say sth like A = 1, and ask you what is happening, the phasor does not decay,
+        # your real and imaginary does not decay, its like a non decreasing hoop
+
+        # To make the "circle" spin for part b, you just need to set the amp to like 0.98
+        # they may ask you if the figure is spining anti or cw, its anti always right to left
+        # you just need to see the curvature of the second plot
+        # if you want to make it go clock wise, just add a negative to the w, like w1 = -2 * np.pi / 36
+
+        # 3.43 3d plot
+        # plotting 3D complex plane
+        plt.rcParams['legend.fontsize'] = 10
+        fig = plt.figure()
+        ax = fig.add_subplot(projection='3d')
+        reVal = y1[0:numSamples].real
+        imgVal = y1[0:numSamples].imag
+        ax.plot(n, reVal, imgVal, label='complex exponential phasor')
+        ax.scatter(n, reVal, imgVal, c='r', marker='o')
+        ax.set_xlabel('sample n')
+        ax.set_ylabel('real')
+        ax.set_zlabel('imag')
+        ax.legend()
+        plt.show()
+
+"""
+N= 16, k=1
+sub in to the equation
+(2 pi /16)(1) = pi/8 rad/sample
+pi/8 = 22.5 degress each sample
+
+N=16.k=2
+(2 pi /16)(2)= pi/4 rad/sample
+pi/4 =45 degress each sample
+
+N=16,k=3
+(2 pi /16)(3)= (6/16) *pi rad/sample
+(6/16) *pi = 67.5 degress each sample
+from ^^ everytime u increase k you move 22.5 degress faster each time
+
+its the angle from 1 point to the next point in the polar plot
+depending on the k value u set, the angular distance can change as a result
+if k were to be like 16, u are moving at a rate of 2pi 
+
+if k and N are ints, the singal is periodic
+
+"""
+
+
+
 
 
 
@@ -341,4 +426,5 @@ def lab3_4():
 #lab3_1()
 #lab3_2()
 #lab3_3()
-lab3_4()
+#lab3_4()
+#lab3_5()
