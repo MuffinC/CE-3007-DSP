@@ -191,16 +191,114 @@ def lab3_2():
 
 def lab3_3():
     #since there was no mention of A or B
-    #following the video
     Fs =60
     A=2
     B=0.5
-    y1 =A* np.cos(2 * np.pi * 10 * t)
+    cycles = 5
+    pointspercyc = 20
+    numpoints = pointspercyc * cycles
+    startt = 0
+    endt=startt+1/Fs*numpoints
+
+    t= np.arange(0,endt,1/Fs)
+    #in this case F = 10 and 15
+    y1 = A* np.cos(2 * np.pi * 10 * t)
     y2 = B* np.cos(2 * np.pi * 15 * t)
-    y3 = y1 + y2
+
+    plt.figure(figsize=(20, 10))
+    plt.subplot(311)
+    plt.stem(t, y1,use_line_collection=True,basefmt="b")
+    plt.subplot(312)
+    plt.stem(t, y2,use_line_collection=True,basefmt="b")
+    plt.subplot(313)
+    plt.stem(t, y2+y1, use_line_collection=True, basefmt="b")
+    plt.show()
+    """
+    3b) period for a cos graph is naturally 2pi, in this case for y1[n],y2[n],y3[n] it is:
+    F/Fs = 10/60 =1/6
+    1/6 *2pi = 1/3pi(in radian) = 120degress[y1[n]]
+    
+    F/Fs = 15/60 =1/4
+    1/4 *2pi = 1/2pi(in radian) = 180degress[y2[n]]
+    
+    period if y3[n] is the lcm of the periods
+    
+    1/3 *1/2 =1/6pi (in radian)=60 degress[y3[n]]
+    
+    3c) y3[n] 's period is dependant on both y1[n] and y2[n]'s period as it is the lcm of the product
+    3d)since it is a periodic signal, it is a power signal as a result(infinite energy)
+    P1 = A**2/2 
+    P2 = B**2/2
+    P3 = 
+    to be explained in real live
+    
+    
+    """
+
+def lab3_4():
+
+    print('Below is figure 2 shows complex exponential')
+    numSamples = 50
+    A = 0.95
+    w1 = 2 * np.pi / 36
+    n = np.arange(0, numSamples, 1)
+    y1 = np.multiply(np.power(A, n), np.exp(1j * w1 * n))
+
+    for zeta in np.arange(0,min(10,numSamples)):
+        print('%d, %.4f + j%.4f'%(n[zeta],y1[zeta].real,y1[zeta].imag))
+
+
+    # plotting in 2-D, the real and imag in the same figure
+    plt.figure(1)
+    plt.plot(n, y1[0:numSamples].real, 'r--o')
+    plt.plot(n, y1[0:numSamples].imag, 'g--o')
+    plt.xlabel('sample index n');
+    plt.ylabel('y[n]')
+    plt.title('Complex exponential (red=real) (green=imag)')
+    plt.grid()
+    plt.show()
+    #a way to show the above is through a table, refer to ss
+
+    # 3.42 phasor portion
+    # plotting in polar, understand what the spokes are
+
+    plt.figure(3)
+    for x in y1:
+        plt.polar([0, np.angle(x)], [0, np.abs(x)], marker='o')
+
+    plt.title('Polar plot showing phasors at n=0..N')
+    plt.show()
+#time is not shown in the 2d plot hence u create a 3d plot
+#how many points to make 1 round? ans is 36,72=2 complete rounds
+#if they say sth like A = 1, and ask you what is happening, the phasor does not decay,
+#your real and imaginary does not decay, its like a non decreasing hoop
+
+# To make the "circle" spin for part b, you just need to set the amp to like 0.98
+#they may ask you if the figure is spining anti or cw, its anti always right to left
+# you just need to see the curvature of the second plot
+
+
+
+#3.43 3d plot
+    # plotting 3D complex plane
+    plt.rcParams['legend.fontsize'] = 10
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    reVal = y1[0:numSamples].real
+    imgVal = y1[0:numSamples].imag
+    ax.plot(n, reVal, imgVal, label='complex exponential phasor')
+    ax.scatter(n, reVal, imgVal, c='r', marker='o')
+    ax.set_xlabel('sample n')
+    ax.set_ylabel('real')
+    ax.set_zlabel('imag')
+    ax.legend()
+    plt.show()
+
+
 
 
 
 #lab3_1()
 #lab3_2()
-lab3_3()
+#lab3_3()
+lab3_4()
