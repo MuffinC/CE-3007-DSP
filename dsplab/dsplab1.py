@@ -276,11 +276,51 @@ def lab3_4():
 # To make the "circle" spin for part b, you just need to set the amp to like 0.98
 #they may ask you if the figure is spining anti or cw, its anti always right to left
 # you just need to see the curvature of the second plot
+#if you want to make it go clock wise, just add a negative to the w, like w1 = -2 * np.pi / 36
+
 
 
 
 #3.43 3d plot
     # plotting 3D complex plane
+    plt.rcParams['legend.fontsize'] = 10
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    reVal = y1[0:numSamples].real
+    imgVal = y1[0:numSamples].imag
+    ax.plot(n, reVal, imgVal, label='complex exponential phasor')
+    ax.scatter(n, reVal, imgVal, c='r', marker='o')
+    ax.set_xlabel('sample n')
+    ax.set_ylabel('real')
+    ax.set_zlabel('imag')
+    ax.legend()
+    plt.show()
+
+#3.44
+    w2 = 2 * np.pi / 18
+    n = np.arange(0, numSamples, 1)
+    y1 = np.multiply(np.power(A, n), np.exp(1j * w2 * n))
+
+    for zeta in np.arange(0, min(10, numSamples)):
+        print('%d, %.4f + j%.4f' % (n[zeta], y1[zeta].real, y1[zeta].imag))
+
+    # plotting in 2-D, the real and imag in the same figure
+    plt.figure(4)
+    plt.plot(n, y1[0:numSamples].real, 'r--o')
+    plt.plot(n, y1[0:numSamples].imag, 'g--o')
+    plt.xlabel('sample index n');
+    plt.ylabel('y[n]')
+    plt.title('Complex exponential (red=real) (green=imag)')
+    plt.grid()
+    plt.show()
+
+    plt.figure(5)
+    for x in y1:
+        plt.polar([0, np.angle(x)], [0, np.abs(x)], marker='o')
+
+    plt.title('Polar plot showing phasors at n=0..N')
+    plt.show()
+
     plt.rcParams['legend.fontsize'] = 10
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
