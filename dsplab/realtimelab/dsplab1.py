@@ -106,6 +106,7 @@ def lab3_1():
     plt.grid()
     plt.show()
 
+
     """
     i) y(t) vs y[nt]:
     y(t) is a continuous time signal while  y[nt] is discrete time which is multiple sampled points of the signal
@@ -425,8 +426,8 @@ if k and N are ints, the singal is periodic
 
 
 
-#lab3_1()
+lab3_1()
 #lab3_2()
 #lab3_3()
 #lab3_4()
-lab3_5()
+#lab3_5()
