@@ -429,4 +429,4 @@ if k and N are ints, the singal is periodic
 #lab3_2()
 #lab3_3()
 #lab3_4()
-lab3_5()
+#lab3_5()
