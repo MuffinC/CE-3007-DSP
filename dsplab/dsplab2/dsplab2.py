@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io.wavfile  as wavfile
+import scipy
 import winsound
 from scipy import signal
 def dsplab2_1():
@@ -17,21 +18,18 @@ def dsplab2_1():
     """
     cyclec= 5
     h = np.array([0.2,0.3,-0.5])
-    n =np.arange(0,2,1)
-
+    n =np.arange(0,3,1)
+    cycle =5
     amp = 1
-    f =0.1
+    f =0.1 #* cycle
     x =amp * np.cos(f*np.pi*n)
-    x_n = np.array([i*(v//50) for v,i in enumerate(x)])
-    h_n = np.array([0 for _ in range(2)] + [0.2,0.3,-0.5] + [0 for _ in range(2)])
-
-    y = np.convolve(x, h)
+    y = np.convolve(x, h,"full")
     plt.figure(1, figsize=(30, 20))
     plt.subplot(211)
-    plt.stem(n, x_n, use_line_collection=True, basefmt="b", linefmt='y')
-    plt.stem(n, h_n, use_line_collection=True, basefmt="b", linefmt='k')
+    plt.stem(n, x, use_line_collection=True, basefmt="b", linefmt='y')
     plt.subplot(212)
-    plt.stem(n, y[50:150], use_line_collection=True, basefmt="b", linefmt='r')
+    plt.stem(n, y[0:3], use_line_collection=True, basefmt="b", linefmt='r')
+    plt.show()
 
 
 
