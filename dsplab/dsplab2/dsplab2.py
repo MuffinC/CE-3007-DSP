@@ -17,7 +17,13 @@ def dsplab2_1():
     Amp and phase changes but frequency remains the same
     Eigen function makes it such that the output is a scaled version
     of the input
+
+    This question is about passing a sinuisodal wave through an LTI system given a characteristic impulse respones
+    It is meant to demonstrate how sine waves are eigen function (modified amplitude and phaseshift but frequency is the same)
+    It also shown how convolution with impulses signals are meant to look like.
+    Lastly it investigate how assuming a sine wave as finite might not be good for our analysis.
     """
+
     cyclec= 5
     h = np.array([0.2,0.3,-0.5])
     n =np.arange(0,3,1)
@@ -264,9 +270,9 @@ def dsplab2_5():
 
 
 #dsplab2_1()
-#dsplab2_3()
+dsplab2_3()
 #dsplab2_4()
-dsplab2_5()
+#dsplab2_5()
 '''
 Q2 
 The impulse response of an LTI can be obtained from the linear constant-coefficient difference equation
