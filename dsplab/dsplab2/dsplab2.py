@@ -126,10 +126,10 @@ def dsplab2_3():
     plotsoundwave(input_file)
 
     #impulse response from manual
-    impulseH = np.zeros(8000)
+    impulseH = np.zeros(18000)
     impulseH[1] = 1
-    impulseH[4000] = 0.5
-    impulseH[7900] = 0.3
+    impulseH[8900] = 1
+    impulseH[17900] = 1
 
     #sketch impulse response
     impulseresp_plot(impulseH)
@@ -234,9 +234,11 @@ def bandpass(fs,lowcut,highcut,order=5):
 
 def notchfilter2(y,f0,Fs=16000):
     # Design notch filter using Dr CES coefficients
-    b,a = bandpass(Fs,3000*0.99,3000*1.01,6)
+    b,a = bandpass(Fs,f0*0.99,f0*1.01,6)
     y_clean = signal.lfilter(b,a, y)
     return y_clean
+
+
 def dsplab2_5():
     #5a
     filename ="helloworld_noisy_16bit.wav"
@@ -256,13 +258,13 @@ def dsplab2_5():
     #5c
     #need filter
     [Fs, y_noisy] = soundextractor(filename)
-    y_clean = notchfiler(y_noisy, 3000, Fs=16000)
+    y_clean = notchfiler(y_noisy, 4000, Fs=16000)
     compare_two_spec(y_noisy, y_clean)
-    music(y_noisy)
-    music(y_clean)
+    #music(y_noisy)
+    #music(y_clean)
 
     #5d
-    y_unclean = notchfilter2(y_noisy, 3000, Fs=16000)
+    y_unclean = notchfilter2(y_noisy, 6000, Fs=16000)
     compare_two_spec(y_noisy, y_unclean)
     music(y_unclean)
 
@@ -271,8 +273,8 @@ def dsplab2_5():
 
 #dsplab2_1()
 #dsplab2_3()
-dsplab2_4()
-#dsplab2_5()
+#dsplab2_4()
+dsplab2_5()
 '''
 Q2 
 The impulse response of an LTI can be obtained from the linear constant-coefficient difference equation
