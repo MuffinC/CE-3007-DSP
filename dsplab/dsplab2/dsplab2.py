@@ -270,8 +270,8 @@ def dsplab2_5():
 
 
 #dsplab2_1()
-dsplab2_3()
-#dsplab2_4()
+#dsplab2_3()
+dsplab2_4()
 #dsplab2_5()
 '''
 Q2 
