@@ -82,7 +82,7 @@ def plotDTFSDTFTMag(X):
 
     axarr.set_ylabel('DTFS mag value')
     plt.show()
-    x = [element * N for element in x] #x is the magnitude for DTFS values 
+    x = [element * N for element in x] #x is the magnitude for DTFS values
     f, axarr = plt.subplots(figsize=(18, 2.5))
     axarr.stem(np.arange(0, N), x)
 
@@ -134,7 +134,7 @@ def myDFTConvolve(ipX, impulseH):
     return np.round(X3, 5)
 
 def lab3_2_1():
-    x=[1,1,0,0,0,0,0,0,0,0,0,0]
+    x=[0,0,1,2,3,0,0,0]
     N = len(x)
     (X1, W1) = myDTFS(x,N)
 
@@ -143,14 +143,18 @@ def lab3_2_1():
     print("DTFS")
     plotMagPhase(X1, Xang1,"DTFS")
 
+    for i in range(len(W1)):
+        # add this to the back = (np.absolute(X1[i]) *2*np.pi) if they ask for X(ejw)
+        print("K =", str(i), "w =", W1[i], "phasor =", Xang1[i],"mag =", (np.absolute(X1[i]) ))
 
     (X2, W2) = myDFT(x, N)
     print("DFT") #phasor values for dtfs and dft are the same because they are both derived from x
     #x2 for dft
+    for i in range(len(W2)):
+        print("K =", str(i), "w =", W2[i], "phasor =", Xang1[i], "mag =", (np.absolute(X2[i])))
     plotMagPhase(X2, Xang1,"DFT")
     arr = []
-    for i in range(len(W1)):
-        print("K =", str(i), "w =", W1[i])
+
 
 
     #Q2c part IDTFS will return same value as IDFT
@@ -258,7 +262,7 @@ def lab3_5_1():
     print(np.round(signal.fftconvolve(x,h),5))
 
 
-#lab3_2_1()
+lab3_2_1()
 #lab3_3_1()
-lab3_4_1()
+#lab3_4_1()
 #lab3_5_1()
