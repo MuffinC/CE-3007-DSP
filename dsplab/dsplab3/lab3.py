@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
+
+
 def myDTFS(x,N):
     X = np.zeros(len(x), dtype=complex)
     Omega = np.zeros(len(x))
@@ -8,9 +10,12 @@ def myDTFS(x,N):
     for k in np.arange(0,len(x)):
         tmpVal = 0.0
         Omega[k] = (2*np.pi/N)*k
+
         for n in np.arange(0,len(x)):
             tmpVal = tmpVal + x[n]*np.exp(-1j*(2*np.pi/N)*k*n)
+        #this will get your the summation of x[n] + expos for all values at Ck
         X[k] = tmpVal/N
+        #x[k] is the Ck value
     return (X,Omega)
 
 
@@ -33,6 +38,7 @@ def myDFT(x,N):
         Omega[k] = (2*np.pi/N)*k
         for n in np.arange(0,len(x)):
             tmpVal = tmpVal + x[n]*np.exp(-1j*(2*np.pi/N)*k*n)
+            #same logic this is just summation opertaion, this will give x[k]
         X[k] = tmpVal
     return (X,Omega)
 
@@ -73,11 +79,14 @@ def plotDTFSDTFTMag(X):
     x = np.absolute(X)
     f, axarr = plt.subplots(figsize=(18, 2.5))
     axarr.stem(np.arange(0, N), x)
+
     axarr.set_ylabel('DTFS mag value')
     plt.show()
     x = [element * N for element in x]
     f, axarr = plt.subplots(figsize=(18, 2.5))
     axarr.stem(np.arange(0, N), x)
+
+
     axarr.set_ylabel('DTFT mag value')
     ticks = range(N)
     ticks = [round(element * 2 / N, 2) for element in ticks]
@@ -128,24 +137,26 @@ def lab3_2_1():
     x=[1,1,0,0,0,0,0,0,0,0,0,0]
     N = len(x)
     (X1, W1) = myDTFS(x,N)
-    (X2, W2) = myDFT(x,N)
-    Xf1 = np.fft.fft(x)
-    Xang1 = np.angle(Xf1)
+
+    Xf1 = np.fft.fft(x) #this will get the complex numbber post fourier transform
+    Xang1 = np.angle(Xf1) #this will get the angle from the resulting complex number
     print("DTFS")
     plotMagPhase(X1, Xang1,"DTFS")
 
 
-    print("DFT")
+    (X2, W2) = myDFT(x, N)
+    print("DFT") #phasor values for dtfs and dft are the same because they are both derived from x
+    #x2 for dft
     plotMagPhase(X2, Xang1,"DFT")
     arr = []
     for i in range(len(W1)):
         print("K =", str(i), "w =", W1[i])
 
 
-    #Q2c part IDTFS willl return same value as IDFT
-    N1=len(X1)
+    #Q2c part IDTFS will return same value as IDFT
+    N1 = len(X1)
     N2 = len(X2)
-    x1 = myIDTFS(X1,N1)
+    x1 = myIDTFS(X1,N1) #this 2 are just formulas
     x2 = myIDFT(X2,N2)
     print("\n")
     print(np.round(x1, 5))
@@ -160,11 +171,11 @@ def lab3_2_1():
     (X2, W2) = myDTFS(ipX2, N2)
     (X3, W3) = myDTFS(ipX3, N3)
 
-    #this is just to fast fourier transform the matrix
+    #this is just to fast fourier transform the matrix as complex numbers
     Xf2 = np.fft.fft(ipX2)
     Xf3 = np.fft.fft(ipX3)
 
-    #to find the phasor value of the ft
+    #to find the phasor value of the ft, since both x values are different, the angle is not the same
     Xang2 = np.angle(Xf2)
     Xang3 = np.angle(Xf3)
     print("X2")
@@ -223,11 +234,18 @@ def lab3_4_1():
     NList = [12, 24, 48, 96]
     for N in NList:
         print("N =", str(N))
-        arr = np.zeros(N)
-        arr[0:7] = 1
+        arr = np.zeros(N) #create the N sized array as all 0s
+        #assign the first 0-7 values as 1s
+        arr[0:7] = 1 #array is = ipX = [1,1,1,1,1,1,1,0,0,0,0,0,0,0,….],
         (X5, W5) = myDTFS(arr,len(arr))
-        #         Xf5 = np.fft.fft(arr)
+
+        #may need to find the phasor
+        # Xf5 = np.fft.fft(arr)
+        # Xang2 = np.angle(Xf5)
+
         plotDTFSDTFTMag(X5)
+        #becuse they want x axis to be respect to k(inteers) and y as w
+
 #       DTFS = DTFT/N for an aperiodic signal
 
 def lab3_5_1():
