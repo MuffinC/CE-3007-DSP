@@ -82,7 +82,7 @@ def plotDTFSDTFTMag(X):
 
     axarr.set_ylabel('DTFS mag value')
     plt.show()
-    x = [element * N for element in x]
+    x = [element * N for element in x] #x is the magnitude for DTFS values 
     f, axarr = plt.subplots(figsize=(18, 2.5))
     axarr.stem(np.arange(0, N), x)
 
@@ -260,5 +260,5 @@ def lab3_5_1():
 
 #lab3_2_1()
 #lab3_3_1()
-#lab3_4_1()
-lab3_5_1()
+lab3_4_1()
+#lab3_5_1()
