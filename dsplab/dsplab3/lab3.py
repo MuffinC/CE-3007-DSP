@@ -120,6 +120,7 @@ def myMatrixDFT(x,N):
 
 def myDFTConvolve(ipX, impulseH):
     L = len(ipX) + len(impulseH) - 1
+    L=5 # change this value for the quiz of they say sth like N =4,5,6,7 , if not just comment out this whole line
     X1 = np.zeros(L)
     X2 = np.zeros(L)
     X1[0:len(ipX)] = ipX
@@ -145,7 +146,7 @@ def lab3_2_1():
 
     for i in range(len(W1)):
         # add this to the back = (np.absolute(X1[i]) *2*np.pi) if they ask for X(ejw)
-        print("K =", str(i), "w =", W1[i], "phasor =", Xang1[i],"mag =", (np.absolute(X1[i]) ))
+        print("K =", str(i), "w =", W1[i], "phasor =", Xang1[i],"mag =", (np.absolute(X1[i]) *2*np.pi))
 
     (X2, W2) = myDFT(x, N)
     print("DFT") #phasor values for dtfs and dft are the same because they are both derived from x
@@ -158,13 +159,17 @@ def lab3_2_1():
 
 
     #Q2c part IDTFS will return same value as IDFT
-    N1 = len(X1)
-    N2 = len(X2)
+
+    #N1 = len(X1)
+    #N2 = len(X2)
+
     x1 = myIDTFS(X1,N1) #this 2 are just formulas
     x2 = myIDFT(X2,N2)
     print("\n")
     print(np.round(x1, 5))
     print(np.round(x2, 5))
+
+
 
 
     #part 2d
@@ -185,9 +190,14 @@ def lab3_2_1():
     print("X2")
     plotMagPhase(X2, Xang2,"ipX2")
     # In X2, Amplitude is same, with phase difference
+    for i in range(len(W2)):
+        print("K =", str(i), "w =", W2[i], "phasor =", Xang2[i], "mag =", (np.absolute(X2[i])))
+
     print("X3")
     plotMagPhase(X3, Xang3,"ipX3")
     # In X3, Phase is same, with amplitude scaled
+    for i in range(len(W2)):
+        print("K =", str(i), "w =", W3[i], "phasor =", Xang3[i], "mag =", (np.absolute(X3[i])))
 
 def lab3_3_1():
     #dft forward analysis
@@ -235,6 +245,7 @@ def lab3_4_1():
 
     # q4a: Because the result of DTFT is continuous where N approaches infinity. We can't have an infinite-sized list
     #becuase it is aperiodic which means it approaches infinity
+
     NList = [12, 24, 48, 96]
     for N in NList:
         print("N =", str(N))
@@ -252,17 +263,30 @@ def lab3_4_1():
 
 #       DTFS = DTFT/N for an aperiodic signal
 
+
+
 def lab3_5_1():
-    x = [1,1,1,0,0,0,0,0,0]
-    h = [1,1,0,0]
+    x = [2,3,4,5]
+    h = [1,1]
     print("myDFTConvolve:")
     y = myDFTConvolve(x,h)
     print(y)
     print("Scipy fftconvolve:")
-    print(np.round(signal.fftconvolve(x,h),5))
+    print(np.round(signal.fftconvolve(x,h),4))
 
+def quiz():
+    # dont use#quiz
 
-lab3_2_1()
+    arr = np.zeros(256)  # create the N sized array as all 0s
+    # assign the first 0-7 values as 1s
+    arr[0] = 640  # array is = ipX = [1,1,1,1,1,1,1,0,0,0,0,0,0,0,….],
+    arr[16] = 256*np.exp(+1j*(np.pi/4))
+    arr[240] = 256*np.exp(-1j*(np.pi/4))
+    (X5, W5) = myIDFT(arr, len(arr))
+    print(np.round(x1, 5))
+    print(np.round(x2, 5))
+#lab3_2_1()
 #lab3_3_1()
 #lab3_4_1()
-#lab3_5_1()
+lab3_5_1()
+#quiz()
