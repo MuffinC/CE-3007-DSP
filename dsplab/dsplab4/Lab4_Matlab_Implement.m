@@ -8,12 +8,13 @@
 close all; clear all;
 
 Duration = 1;
-
-F1000 = 1000;
-T1000 = 1/F1000;
+%Wo = omg/Fs= 2 pi fo = 2 pi 2
+F1000 = 1000;%Fs
+T1000 = 1/F1000;%T
 n=1:F1000*Duration;
+
 for n=1:F1000*Duration
-  y1000(n) = 2*sin(2*pi*2*(n-1)*T1000+(pi/4));  
+  y1000(n) = 2*sin(2*pi*2*(n-1)*T1000+(pi/4));  %Wo= 2 pi 2 /Fs, y(t) values at f=1000hz
   t1000(n) = (n-1)*T1000;
 end
 
@@ -39,6 +40,7 @@ rsig = upsample(y100,10);
 plot(t1000(1:length(rsig)), rsig,'r+'); title('Upsampling of 100Hz Signal');hold;
 
 pause;
+%red colour is the output
 
 % Upsample, apply a lowpass FIR filter to rsig.
 
