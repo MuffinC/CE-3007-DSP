@@ -9,7 +9,7 @@ N = 31;
 w_c = 2*pi*2.5/10; %2*pi*f/Fs???;   
 % How to calculate the normalized cut-off frequeny given the sampling rate at 10Khz and the stop-band at 2.5Khz?
 % Fs = 10 000hz,Fstopband = 2500hz
-% Wcut = 2*pi*Fs/Fstop =0.5 pi hz
+% Wcut = 2*pi*Fstop/Fs =0.5 pi hz
 % then normalize over pi will give you 0.5hz
 n_range = -15:1:15;
 midX = length(n_range)/2;
@@ -51,4 +51,4 @@ stopband_attn = max(abs(meow(18:length(meow))))  %try and error to get the first
 B_ham = fir1(N-1,w_c/pi, hamming(N),'noscale');
 fvtool(B_ham,1);
 
- 
+ %filterDesigner for IIR designing
